@@ -1,27 +1,8 @@
-//Get the Org ID
-getOrganizations = invokeurl
-[
-	url :"https://books.zoho.com/api/v3/organizations"
-	type :GET
-	connection:"zohobooks" // Change this to your connection name
-];
-orgId = getOrganizations.get("organizations").get(0).get("organization_id");
-info orgId;
-
-customerIDs = List();
-for each  row in Overdue_Invoices
-{
-	if(row.Levy_Finance_Charge = true)
-	{
-		if(!customerIDs.contains(row.Customer_ID))
-		{
-			customerIDs.add(row.Customer_ID);
-		}
-	}
-}
+customerIDs = Overdue_Invoices[Levy_Finance_Charge == true].Customer_ID.getAll();
 
 for each  c in customerIDs
 {
+	//Can be replaced as for each  c Overdue_Invoices[Levy_Finance_Charge == true] and use c.Customer_ID from here after
 	prevFC = "";
 	currFC = "";
 	line_items = List();
@@ -29,6 +10,7 @@ for each  c in customerIDs
   
 	for each  row in Overdue_Invoices
 	{
+	// why loop again?
 		if(row.Levy_Finance_Charge = true)
 		{
 			if(c = row.Customer_ID)
@@ -82,6 +64,7 @@ for each  c in customerIDs
 	customFieldMap1.put("value",currentDate);
 	customFieldList.add(customFieldMap1);
 	
+	//Same loop?
   for each  row in Overdue_Invoices
 	{
 		if(row.Levy_Finance_Charge = true)
