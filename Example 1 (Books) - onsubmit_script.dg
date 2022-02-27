@@ -8,17 +8,7 @@ getOrganizations = invokeurl
 orgId = getOrganizations.get("organizations").get(0).get("organization_id");
 info orgId;
 
-customerIDs = List();
-for each  row in Overdue_Invoices
-{
-	if(row.Levy_Finance_Charge = true)
-	{
-		if(!customerIDs.contains(row.Customer_ID))
-		{
-			customerIDs.add(row.Customer_ID);
-		}
-	}
-}
+customerIDs = Overdue_Invoices[Levy_Finance_Charge == true].Customer_ID.getAll();
 
 for each  c in customerIDs
 {
